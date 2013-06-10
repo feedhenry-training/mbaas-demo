@@ -2,7 +2,9 @@
   "name": "mbaas-demo",
   "version": "1.0.0",
   "dependencies" : {
-    "fh-nodeapp" : "*"
+    "fh-nodeapp" : "*",
+    "twilio" : "1.1.2",
+    "sendgrid" : "0.2.5"
   },
   "scripts": {
     "test": "node test/tests.js"
