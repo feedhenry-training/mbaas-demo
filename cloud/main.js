@@ -39,3 +39,29 @@ exports.email = function(params, cb){
     return cb(null, { ok : true});
   });
 };
+
+exports.s3 = function(params, callback){
+  var s3 = require('knox'),
+  client = s3.createClient({
+    key: "AKIAIT2XID47BVU23WZQ",
+    secret: "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",
+    bucket: "cianstestbucket"
+  });
+  client.list({}, function(err, data){
+    if (err) {
+      return callback(err);
+    }
+
+    var contents = data && data.Contents;
+
+    if (!contents){
+      return callback({err : "No files found" });
+    }
+    return callback(null, contents);
+  });
+};
+
+exports.data = function(params, cb){
+  exports.s3({}, cb);
+
+};
