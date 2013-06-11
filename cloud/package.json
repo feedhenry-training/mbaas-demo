@@ -5,7 +5,7 @@
     "fh-nodeapp" : "*",
     "twilio" : "1.1.2",
     "sendgrid" : "0.2.5",
-    "knox" : "0.8.3"
+    "knox" : "0.5.2"
   },
   "scripts": {
     "test": "node test/tests.js"
