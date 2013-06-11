@@ -65,3 +65,12 @@ exports.data = function(params, cb){
   exports.s3({}, cb);
 
 };
+
+exports.db = function(params, cb){
+  return callback(null, [
+    {
+      key : 'row1',
+      val : 'val1'
+    }
+  ]);
+}

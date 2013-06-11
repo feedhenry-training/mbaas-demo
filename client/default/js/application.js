@@ -13,9 +13,11 @@ var app = {
       $('#smsShow').on('click', this.showPopup);
       $('#dbShow').on('click', this.showPopup);
       $('#dataShow').on('click', this.showPopup);
+     $('#dbShow').on('click', this.showPopup);
       $('#modalScreen').on('click', this.hidePopup)
       $('.actionLink').on('click', this.doAction);
       $('#showDataLink').on('click', this.showData);
+      $('#showDbLink').on('click', this.showDb);
    },
    hidePopup : function(){
      $('#modalScreen').hide();
@@ -62,9 +64,6 @@ var app = {
        }
      });
    },
-   dbLink : function(){
-
-   },
   showData : function(){
 
     app.doAct({
@@ -88,6 +87,29 @@ var app = {
    dataLink : function(){
      $('#dataLink').hide();
      $('#showDataLink').show();
+   },
+   dbLink : function(){
+     $('#dbLink').hide();
+     $('#showDbLink').show();
+   },
+   showDb : function(){
+     app.doAct({
+       act : 'db'
+     }, function(err, data){
+       if (err){
+         alert(err.err);
+         return;
+       }
+       $('#dbLink').show();
+       $('#showDbLink').hide();
+
+       $('#oracleList').empty();
+       for (var i=0; i<data.length; i++){
+         var d = data[i];
+         $('#oracleList').append('<li>' + d.key + '</li>');
+       }
+
+     });
    },
    doAct : function(req, cb){
       $fh.act({
