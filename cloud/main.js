@@ -43,9 +43,9 @@ exports.email = function(params, cb){
 exports.s3 = function(params, callback){
   var s3 = require('knox'),
   client = s3.createClient({
-    key: "AKIAIT2XID47BVU23WZQ",
-    secret: "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",
-    bucket: "cianstestbucket"
+    key: process.env.S3_KEY,
+    secret: process.env.S3_SECRET,
+    bucket: process.env.S3_BUCKET
   });
   client.list({}, function(err, data){
     if (err) {
