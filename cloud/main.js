@@ -47,7 +47,9 @@ exports.s3 = function(params, callback){
     secret: process.env.S3_SECRET,
     bucket: process.env.S3_BUCKET
   });
+  console.log('s3');
   client.list({}, function(err, data){
+    console.log('s3 list :: err=', err, ' data', data);
     if (err) {
       return callback(err);
     }
@@ -57,7 +59,8 @@ exports.s3 = function(params, callback){
     if (!contents){
       return callback({err : "No files found" });
     }
-    return callback(null, contents);
+    console.log('returning contents :: ', contents);
+    return callback(null, {'contents':contents});
   });
 };
 
