@@ -65,7 +65,7 @@ var app = {
      });
    },
   showData : function(){
-
+    var self = this;
     app.doAct({
       act : 'data'
     }, function(err, res){
@@ -74,14 +74,36 @@ var app = {
         return;
       }
       var data = res.contents;
+      self.s3 = data;
       $('#dataLink').show();
       $('#showDataLink').hide();
 
       $('#s3List').empty();
       for (var i=0; i<data.length; i++){
         var d = data[i];
-        $('#s3List').append('<li>' + d.Key + '</li>');
+        $('#s3List').append('<li data-index="' + i + '">' + d.Key + '</li>');
       }
+
+      $('#s3List li').on('click', function(){
+        var index = $(this).attr('data-index');
+        var bucket = self.s3[parseInt(index)];
+        $fh.webview({
+          'act': 'open',
+          'url': 'https://s3.amazonaws.com/cianstestbucket/' + bucket.Key,
+          'title': 'S3 File'
+        }, function(res) {
+          if (res === "opened") {
+            //webview window is now open
+          }
+          if (res === "closed") {
+            //webview window is now closed
+          }
+        }, function(msg, err) {
+
+        });
+
+
+      });
 
     });
   },
