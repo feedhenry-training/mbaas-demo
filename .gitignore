@@ -1,7 +1,8 @@
 # Ignore standard IDE project files
 .project
 .idea
-
+.fhclocal/*
+.fhclocal
 .settings
 .DS_Store
 */.DS_Store
