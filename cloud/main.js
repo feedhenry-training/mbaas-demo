@@ -49,6 +49,7 @@ exports.s3 = function(params, callback){
   });
   console.log('s3');
   client.list({}, function(err, data){
+    console.log('s3 list :: err=', err, ' data', data);
     if (err) {
       return callback(err);
     }
