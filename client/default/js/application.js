@@ -68,11 +68,12 @@ var app = {
 
     app.doAct({
       act : 'data'
-    }, function(err, data){
+    }, function(err, res){
       if (err){
         alert(err.err);
         return;
       }
+      var data = res.contents;
       $('#dataLink').show();
       $('#showDataLink').hide();
 
