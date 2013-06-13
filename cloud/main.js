@@ -59,7 +59,7 @@ exports.s3 = function(params, callback){
     if (!contents){
       return callback({err : "No files found" });
     }
-    console.log('returning contents');
+    console.log('returning contents :: ', contents);
     return callback(null, contents);
   });
 };
