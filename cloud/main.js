@@ -47,6 +47,7 @@ exports.s3 = function(params, callback){
     secret: process.env.S3_SECRET,
     bucket: process.env.S3_BUCKET
   });
+  console.log('s3');
   client.list({}, function(err, data){
     if (err) {
       return callback(err);
