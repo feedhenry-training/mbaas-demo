@@ -19,9 +19,6 @@
     opacity: 0.4;
     z-index: 100;
 }
-body {
-    overflow: hidden;
-}
 
 .container {
     overflow-y: scroll;
