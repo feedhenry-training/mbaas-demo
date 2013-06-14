@@ -81,6 +81,7 @@ var app = {
      app.doAct({
        act : 'db',
        operation : 'create',
+       type : 'mbaas',
        fields : field
      }, function(err, res){
         if (err){
@@ -134,7 +135,8 @@ var app = {
    dbPopup : function(){
      app.doAct({
        act : 'db',
-       operation : 'list'
+       operation : 'list',
+       type : 'mbaas'
      }, function(err, data){
        if (err){
          alert(err.err);
