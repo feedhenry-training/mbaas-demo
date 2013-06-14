@@ -52,17 +52,17 @@
         <div class="span3 home">
           <div class="tile">
             <img src="images/icons/Pensils@2x.png" alt="Infinity-Loop@2x" class="tile-image">
-            <h3 class="tile-title">Mongo -> Oracle</h3>
-            <p>Transfer data from a next-gen NoSQL to Oracle SQL</p>
+            <h3 class="tile-title">Database</h3>
+            <p>Insert data into our mBaaS data store using $fh.db</p>
             <a id="dbShow" class="btn btn-primary btn-large btn-block" href="#">DB</a>
           </div>
         </div>
-
+            
         <div class="span3 home">
           <div class="tile">
             <img src="images/icons/Pocket@2x.png" alt="Pensils@2x" class="tile-image">
             <h3 class="tile-title">Data Storage</h3>
-            <p>Amazon S3 to OpenStack? Not a problem! </p>
+            <p>List files in an Amazon S3 bucket </p>
 
             <a id="dataShow" class="btn btn-primary btn-large btn-block" href="#">Data</a>
           </div>
@@ -120,58 +120,53 @@
         <div class="tile">
           <img src="images/icons/Pocket@2x.png" alt="Chat@2x" class="tile-image">
           <h3 class="tile-title">Data</h3>
-          <p>List data in S3 and OpenStack</p>
+          <p>List data in S3</p>
 
           <div class="row">
-            <div class="span3">
+            <div class="span6">
             <h3>S3 Files:</h3>
+            <i>Click a file to see it's contents in a $fh.webview</i>
             <ul id="s3List">
 
             </ul>
             </div>
-            <div class="span3">
-              <h3>OpenStack Files:</h3>
-              <ul id="openstackList">
-
-              </ul>
-            </div>
           </div>
 
-          <a id="showDataLink" class="btn btn-primary btn-large btn-block" href="#">Mashup</a>
-          <a style="display:none;" id="dataLink" class="actionLink btn btn-primary btn-large btn-block" href="#">Done!</a>
+          <a id="dataLink" class="actionLink btn btn-primary btn-large btn-block" href="#">Done!</a>
         </div>
       </div>
 
 
 
       <!-- Db -->
-      <!--
+
       <div id="dbPopup" class="span6 popup" style="display : none;">
         <div class="tile">
           <img src="images/icons/Pensils@2x.png" alt="Chat@2x" class="tile-image">
           <h3 class="tile-title">DB</h3>
-          <p>List data in Oracle and MongoDB</p>
+          <p>List data in $fh.db</p>
+
+
+
+          <div class="btn-group">
+            <textarea id="dbObject"  value="{ 'foo' : 'bar'  }" placeholder="{ 'key' : 'JSON data' }" class="span3"></textarea>
+          </div>
+          <a id="insertLink" class="actionLink btn btn-primary btn-large " href="#">Insert!</a>
+          <br /><br />
 
           <div class="row">
-            <div class="span3">
-              <h3>Oracle Files:</h3>
-              <ul id="oracleList">
-
-              </ul>
-            </div>
-            <div class="span3">
-              <h3>MongoDB Files:</h3>
-              <ul id="mongoList">
+            <div class="span6">
+              <h3>$fb.db rows:</h3>
+              <ul id="dbList">
 
               </ul>
             </div>
           </div>
 
-          <a id="showDbLink" class="btn btn-primary btn-large btn-block" href="#">Mashup DB</a>
-          <a style="display:none;" id="dbLink" class="actionLink btn btn-primary btn-large btn-block" href="#">Done!</a>
+          <a id="showDbLink" class="actionLink btn btn-primary btn-large btn-block" href="#">Done!</a>
+          <a style="display:none;" id="dbLink" class="btn btn-primary btn-large btn-block" href="#">Done!</a>
         </div>
       </div>
--->
 
     </div> <!-- /container -->
 
@@ -184,10 +179,8 @@
     <script src="js/bootstrap-switch.js"></script>
     <script src="js/flatui-checkbox.js"></script>
     <script src="js/flatui-radio.js"></script>
-    <script src="js/jquery.tagsinput.js"></script>
     <script src="js/jquery.placeholder.js"></script>
-    <script src="js/jquery.stacktable.js"></script>
-    <script src="http://vjs.zencdn.net/c/video.js"></script>
-    <script src="js/application.js"></script>
+
+    <script src="js/app.js"></script>
   </body>
 </html>

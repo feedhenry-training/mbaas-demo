@@ -10,8 +10,8 @@ exports.sms = function(params, cb){
   client = require('twilio')(accountSid, authToken);
 
   client.sms.messages.create({
-    body: params.body || "Hi Cian",
-    to: params.to || "+17812668111",
+    body: params.body,
+    to: params.to,
     from: "+18572541934"
   }, function(err, message) {
     return cb(err, message);
@@ -27,7 +27,7 @@ exports.email = function(params, cb){
   var SendGrid = require('sendgrid').SendGrid;
   var sendgrid = new SendGrid(process.env.SENDGRID_USERNAME, process.env.SENDGRID_PASSWORD);
   sendgrid.send({
-    to: params.to || 'cian.clarke@feedhenry.com',
+    to: params.to,
     from: 'mobile@feedhenry.com',
     fromname : 'FeedHenry mBaaS',
     subject: params.subject || "FeedHenry Email",
@@ -69,11 +69,8 @@ exports.data = function(params, cb){
 
 };
 
-exports.db = function(params, cb){
-  return callback(null, [
-    {
-      key : 'row1',
-      val : 'val1'
-    }
-  ]);
+exports.db = function(params, callback){
+  params.act = params.operation || "list";
+  params.type = 'mbaas';
+  return $fh.db(params, callback);
 }

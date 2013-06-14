@@ -33,10 +33,15 @@ var app = {
       $('.popup').hide();
       $('#' + popupId).show();
       $('#modalScreen').show();
+      if (app.hasOwnProperty(popupId)){
+        app[popupId].call(app, []);
+      }
    },
    doAction : function(){
      var id = this.id;
-     app[id].call(app, []);
+     if (app.hasOwnProperty(id)){
+       app[id].call(app, []);
+     }
      app.hidePopup();
    },
    emailLink : function(){
@@ -64,7 +69,27 @@ var app = {
        }
      });
    },
-  showData : function(){
+   insertLink : function(){
+     var self = this,
+     field;
+     try{
+       field = JSON.parse($('#dbObject').val());
+     }catch(err){
+      return alert('Improper JSON');
+     }
+
+     app.doAct({
+       act : 'db',
+       operation : 'create',
+       fields : field
+     }, function(err, res){
+        if (err){
+          return alert('Error creating field');
+        }
+        alert('Field created successfully');
+     });
+   },
+   dataPopup : function(){
     var self = this;
     app.doAct({
       act : 'data'
@@ -75,8 +100,6 @@ var app = {
       }
       var data = res.contents;
       self.s3 = data;
-      $('#dataLink').show();
-      $('#showDataLink').hide();
 
       $('#s3List').empty();
       for (var i=0; i<data.length; i++){
@@ -106,30 +129,23 @@ var app = {
       });
 
     });
-  },
-   dataLink : function(){
-     $('#dataLink').hide();
-     $('#showDataLink').show();
    },
-   dbLink : function(){
-     $('#dbLink').hide();
-     $('#showDbLink').show();
-   },
-   showDb : function(){
+
+   dbPopup : function(){
      app.doAct({
-       act : 'db'
+       act : 'db',
+       operation : 'list'
      }, function(err, data){
        if (err){
          alert(err.err);
          return;
        }
-       $('#dbLink').show();
-       $('#showDbLink').hide();
 
-       $('#oracleList').empty();
-       for (var i=0; i<data.length; i++){
-         var d = data[i];
-         $('#oracleList').append('<li>' + d.key + '</li>');
+       $('#dbList').empty();
+       var entries = data.list;
+       for (var i=0; i<entries.length; i++){
+         var d = entries[i];
+         $('#dbList').append('<li>' + JSON.stringify(d.fields) + '</li>');
        }
 
      });
