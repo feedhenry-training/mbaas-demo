@@ -36,7 +36,7 @@ main.couchdb({
 });
 
 main.s3({
-bucket : 'ciantest'
+bucket : 'cianstestbucket'
 },
 function(err, res){
   assert.ok(!err);

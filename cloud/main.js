@@ -1,4 +1,14 @@
 /*
+ Exposes $fb.db to the client side
+ @param operation the $fh.db operation we want to do - e.g. list, create, update
+ @param type the $fb.db collection / table name we want to insert into / query
+ */
+exports.db = function(params, callback){
+  params.act = params.operation || "list";
+  return $fh.db(params, callback);
+};
+
+/*
  @param param.query : the query to execute
  */
 exports.mysql = function(params, cb){
@@ -374,25 +384,3 @@ exports.mixpanel = function(params, cb){
   });
   return cb(null, { ok : true })
 };
-
-
-
-
-
-
-
-
-exports.data = function(params, cb){
-  exports.s3({}, cb);
-
-};
-
-/*
-  Exposes $fb.db to the client side
-  @param operation the $fh.db operation we want to do - e.g. list, create, update
-  @param type the $fb.db collection / table name we want to insert into / query
- */
-exports.db = function(params, callback){
-  params.act = params.operation || "list";
-  return $fh.db(params, callback);
-}

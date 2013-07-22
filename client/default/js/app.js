@@ -93,7 +93,10 @@ var app = {
    dataPopup : function(){
     var self = this;
     app.doAct({
-      act : 'data'
+      act : 's3',
+      req : {
+        bucket : 'cianstestbucket'
+      }
     }, function(err, res){
       if (err){
         alert(err.err);
