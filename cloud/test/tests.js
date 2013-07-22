@@ -35,7 +35,9 @@ main.couchdb({
   assert.ok(res);
 });
 
-main.s3({},
+main.s3({
+bucket : 'ciantest'
+},
 function(err, res){
   assert.ok(!err);
   assert.ok(res);
@@ -46,3 +48,82 @@ function(err, res){
   assert.ok(!err);
   assert.ok(res);
 });
+
+main.salesforce({
+  query : "SELECT Id, Name FROM Account"
+},
+function(err, res){
+  assert.ok(!err);
+  assert.ok(res);
+});
+
+main.googleapis({
+  url : 'http://google.com'
+}, function(err, res){
+  assert.ok(!err);
+  assert.ok(res);
+  assert.ok(res.longUrl);
+});
+
+main.intercom({
+  user : 'john.doe@example.com'
+}, function(err, res){
+  assert.ok(!err);
+  assert.ok(res);
+  assert.ok(res.created_at);
+});
+
+main.netweaver({
+}, function(err, res){
+  assert.ok(!err);
+  assert.ok(res);
+  assert.ok(res.GetVersion());
+});
+
+main.stripe({
+  email : 'foobar@example.org'
+}, function(err, res){
+  assert.ok(!err);
+  assert.ok(res);
+  assert.ok(typeof res.account_balance !== 'undefined');
+});
+
+main.paypal({
+  card : {
+    "type": "visa",
+    "number": "4417119669820331",
+    "expire_month": "11",
+    "expire_year": "2018",
+    "cvv2": "123",
+    "first_name": "Joe",
+    "last_name": "Shopper"
+  }
+}, function(err, res){
+  assert.ok(!err);
+  assert.ok(res);
+  assert.ok(res.state === 'ok')
+});
+
+main.logentries({
+  msg : {sleep:"all night", work:"all day"}
+}, function(err, res){
+  assert.ok(!err);
+  assert.ok(res);
+  assert.ok(res.ok);
+});
+
+main.loggly({
+  msg : '127.0.0.1 - Theres no place like home'
+}, function(err, res){
+  assert.ok(!err);
+  assert.ok(res);
+  assert.ok(res.response === "ok");
+});
+
+main.mixpanel({
+
+}, function(err, res){
+  assert.ok(!err);
+  assert.ok(res);
+  assert.ok(res.ok);
+});;

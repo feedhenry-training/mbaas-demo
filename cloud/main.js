@@ -169,15 +169,15 @@ exports.email = function(params, cb){
 
 /*
   Retrieves the contents of an Amazon S3 bucket
+  @param params.bucket : Bucket name we're retrieving the listing from
 */
 exports.s3 = function(params, callback){
   var s3 = require('knox'),
   client = s3.createClient({
     key: process.env.S3_KEY,
     secret: process.env.S3_SECRET,
-    bucket: process.env.S3_BUCKET
+    bucket: params.bucket
   });
-  console.log('s3');
   client.list({}, function(err, data){
     console.log('s3 list :: err=', err, ' data', data);
     if (err) {
@@ -194,6 +194,9 @@ exports.s3 = function(params, callback){
   });
 };
 
+/*
+
+ */
 exports.rabbitmq = function(params, cb){
   var context = require('rabbit.js').createContext(process.env.RABBITMQ_HOST);
   context.on('ready', function() {
@@ -212,11 +215,165 @@ exports.rabbitmq = function(params, cb){
 
 };
 
+/*
+  Performs authentication with SalesForce using SOAP API then queries the db
+  @param params.query : The SOQL query to perform
+ */
+exports.salesforce = function(params, cb){
+  var sf = require('node-salesforce'),
+  pass = (typeof process.env.SF_SECURITYTOKEN === 'undefined') ? process.env.SF_PASSWORD : process.env.SF_PASSWORD + process.env.SF_SECURITYTOKEN;
+  var conn = new sf.Connection({
+  });
+  conn.login(process.env.SF_USERNAME, pass, function(err, userInfo) {
+    if (err) {
+      return cb(err);
+    }
+    conn.query(params.query, cb);
+  });
+};
 
+/*
+  Example of using google apis module to discover the URL shortener module, and shorten
+  a url
+  @param params.url : the URL to shorten
+ */
+exports.googleapis = function(params, cb){
+  var googleapis = require('googleapis');
+  googleapis
+  .discover('urlshortener', 'v1')
+  .execute(function(err, client) {
+    var req1 = client.urlshortener.url.insert({ longUrl: params.url });
 
+    req1.execute(cb);
+  });
+};
 
+/*
+  Logs into the Intercom.io API using your APP and API key,
+  then retrieves the information on a specific user
+  @param params.user : the user who's info to retrieve
+ */
+exports.intercom = function(params, cb){
+  var settings = {
+    "API_KEY": process.env.INTERCOM_API_KEY,
+    "APP_ID": process.env.INTERCOM_APP_KEY
+  };
+  var intercom = require('node-intercom').app(settings);
 
+  intercom.users.get(params.user,function(code, body){
+    if (code.toString()[0] !== '2'){
+      // If our response code isn't a 2**, error condition..
+      return cb(code);
+    }
+    // Body is a JSON string - parse it into an object
+    try{
+      body = JSON.parse(body);
+      return cb(null, body);
+    }catch(err){
+      return cb(err);
+    }
+  });
+};
 
+///*
+//  Needs native library install
+// */
+//exports.netweaver = function(err, res){
+//  var conParams = {
+//    ashost: '192.168.0.10',
+//    sysid: 'NPL',
+//    sysnr: '42',
+//    user: 'DEVELOPER',
+//    passwd: 'password',
+//    client: '001',
+//    lang: 'E'
+//  };
+//  var con = new sapnwrfc.Connection;
+//
+//  con.Open(conParams, function(err) {
+//    if (err) {
+//      console.log(err);
+//      return;
+//    }
+//    return cb(err, con);
+//  });
+//};
+
+/*
+ Authenticates with Stripe and creates a customer
+ @param params.email : the user account we're creating
+ */
+exports.stripe = function(params, cb){
+  var api_key = process.env.STRIPE_API_KEY;  // secret stripe API key
+  var stripe = require('stripe')(api_key);
+  return stripe.customers.create( { email: params.email }, cb );
+};
+
+/*
+  Connects to the Paypal SDK, and shows an example of adding a credit card to the system.
+  @param params.card : JSON object representing the card being created - expects type, number, expire_month, expire_year, cvv2, first_name, last_name
+ */
+exports.paypal = function(params, cb){
+  var paypal_sdk = require('paypal-rest-sdk');
+  paypal_sdk.configure({
+    'host': process.env.PAYPAL_HOST || 'api.paypal.com',
+    'port': process.env.PAYPAL_PORT || '443',
+    'client_id': process.env.PAYPAL_CLIENT_ID,
+    'client_secret': process.env.PAYPAL_CLIENT_SECRET
+  });
+
+  return paypal_sdk.credit_card.create(params.card, cb);
+};
+
+/*
+  Logs a message to a logentries app
+  @param params.msg : the message to log
+ */
+exports.logentries = function(params, cb){
+  var logentries = require('node-logentries')
+
+  var log = logentries.logger({
+    token: process.env.LOGENTRIES_APP_TOKEN
+  });
+  log.log("debug", params.msg);
+  log.end();
+  return cb(null, { ok : true });
+};
+
+/*
+  Logs a message to loggly
+  @param params.msg : the message to log
+ */
+exports.loggly = function(params, cb){
+  var loggly = require('loggly');
+  var config = {
+    subdomain: process.env.LOGGLY_SUBDOMAIN,
+    auth: {
+      username: process.env.LOGGLY_USERNAME,
+      password: process.env.LOGGLY_PASSWORD
+    }
+  };
+  var client = loggly.createClient(config);
+  return client.log(process.env.LOGGLY_INPUT_TOKEN, params.msg, cb);
+};
+
+/*
+ Tracks an event with the Mixpanel API
+ */
+exports.mixpanel = function(params, cb){
+  var Mixpanel = require('mixpanel');
+  // create an instance of the mixpanel client
+  var mixpanel = Mixpanel.init(process.env.MIXPANEL_API_KEY);
+
+// track an event with optional properties
+  mixpanel.track("my event", {
+    distinct_id: "some unique client id",
+    as: "many",
+    properties: "as",
+    you: "want"
+  });
+  return cb(null, { ok : true })
+};
 
 
 
