@@ -136,51 +136,9 @@ exports.mongoose = function(params, cb){
  };
 
 /*
-  Sends an SMS with the twilio API
-  @param to : recipient
-  @param body : message body
+ Retrieves the contents of an Amazon S3 bucket
+ @param params.bucket : Bucket name we're retrieving the listing from
  */
-exports.sms = function(params, cb){
-  // Your accountSid and authToken from twilio.com/user/account
-  var accountSid = process.env.TWILIO_SID,
-  authToken = process.env.TWILIO_AUTH,
-  client = require('twilio')(accountSid, authToken);
-
-  client.sms.messages.create({
-    body: params.body,
-    to: params.to,
-    from: "+18572541934"
-  }, function(err, message) {
-    return cb(err, message);
-  });
-};
-
-/*
-  @param to : recipient
-  @param subject : email subjecrt
-  @param body : message body
- */
-exports.email = function(params, cb){
-  var SendGrid = require('sendgrid').SendGrid;
-  var sendgrid = new SendGrid(process.env.SENDGRID_USERNAME, process.env.SENDGRID_PASSWORD);
-  sendgrid.send({
-    to: params.to,
-    from: 'mobile@feedhenry.com',
-    fromname : 'FeedHenry mBaaS',
-    subject: params.subject || "FeedHenry Email",
-    text: params.body || "Here is an email from a FeedHenry app!"
-  }, function(success, message) {
-    if (!success) {
-      return cb(message);
-    }
-    return cb(null, { ok : true});
-  });
-};
-
-/*
-  Retrieves the contents of an Amazon S3 bucket
-  @param params.bucket : Bucket name we're retrieving the listing from
-*/
 exports.s3 = function(params, callback){
   var s3 = require('knox'),
   client = s3.createClient({
@@ -203,6 +161,50 @@ exports.s3 = function(params, callback){
     return callback(null, {'contents':contents});
   });
 };
+
+/*
+ @param params.to : recipient
+ @param params.subject : email subjecrt
+ @param params.body : message body
+ */
+exports.sendgrid = function(params, cb){
+  var SendGrid = require('sendgrid').SendGrid;
+  var sendgrid = new SendGrid(process.env.SENDGRID_USERNAME, process.env.SENDGRID_PASSWORD);
+  sendgrid.send({
+    to: params.to,
+    from: 'mobile@feedhenry.com',
+    fromname : 'FeedHenry mBaaS',
+    subject: params.subject || "FeedHenry Email",
+    text: params.body || "Here is an email from a FeedHenry app!"
+  }, function(success, message) {
+    if (!success) {
+      return cb(message);
+    }
+    return cb(null, { ok : true});
+  });
+};
+
+/*
+  Sends an SMS with the twilio API
+  @param to : recipient
+  @param body : message body
+ */
+exports.twillio = function(params, cb){
+  // Your accountSid and authToken from twilio.com/user/account
+  var accountSid = process.env.TWILIO_SID,
+  authToken = process.env.TWILIO_AUTH,
+  client = require('twilio')(accountSid, authToken);
+
+  client.sms.messages.create({
+    body: params.body,
+    to: params.to,
+    from: "+18572541934"
+  }, function(err, message) {
+    return cb(err, message);
+  });
+};
+
+
 
 /*
 
@@ -231,10 +233,10 @@ exports.rabbitmq = function(params, cb){
  */
 exports.salesforce = function(params, cb){
   var sf = require('node-salesforce'),
-  pass = (typeof process.env.SF_SECURITYTOKEN === 'undefined') ? process.env.SF_PASSWORD : process.env.SF_PASSWORD + process.env.SF_SECURITYTOKEN;
+  pass = (typeof process.env.SALESFORCE_SECURITYTOKEN === 'undefined') ? process.env.SALESFORCE_PASSWORD : process.env.SALESFORCE_PASSWORD + process.env.SALESFORCE_SECURITYTOKEN;
   var conn = new sf.Connection({
   });
-  conn.login(process.env.SF_USERNAME, pass, function(err, userInfo) {
+  conn.login(process.env.SALESFORCE_USERNAME, pass, function(err, userInfo) {
     if (err) {
       return cb(err);
     }
@@ -327,7 +329,7 @@ exports.paypal = function(params, cb){
   var paypal_sdk = require('paypal-rest-sdk');
   paypal_sdk.configure({
     'host': process.env.PAYPAL_HOST || 'api.paypal.com',
-    'port': process.env.PAYPAL_PORT || '443',
+    'port': '443',
     'client_id': process.env.PAYPAL_CLIENT_ID,
     'client_secret': process.env.PAYPAL_CLIENT_SECRET
   });
@@ -384,3 +386,18 @@ exports.mixpanel = function(params, cb){
   });
   return cb(null, { ok : true })
 };
+
+/*
+  Uses underscore's .each iterator to iterate over a list and produce a comma separated string of it's values
+  @param params.list : a list of items to transform to a row in CSV
+ */
+exports.underscore = function(params, cb){
+  var _ = require('underscore'),
+  str = "";
+  _.each(params.list, function(el, index){
+    str += el;
+    str = (index === params.list.length) ? str : str+";";
+  });
+  return cb(null, str);
+};
+

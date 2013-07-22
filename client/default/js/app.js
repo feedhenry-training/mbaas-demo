@@ -46,7 +46,7 @@ var app = {
    },
    emailLink : function(){
      app.doAct({
-      act : 'email',
+      act : 'sendgrid',
       to : $('input[type=email]').val(),
       body : $('#emailBody').val()
      }, function(err, res){
@@ -57,7 +57,7 @@ var app = {
    },
    smsLink : function(){
      app.doAct({
-       act : 'sms',
+       act : 'twillio',
        to : $('select').val() + $('input[type=number]').val(),
        body : $('#smsBody').val()
      }, function(err, res){

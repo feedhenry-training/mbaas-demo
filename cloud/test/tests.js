@@ -126,4 +126,11 @@ main.mixpanel({
   assert.ok(!err);
   assert.ok(res);
   assert.ok(res.ok);
-});;
+});
+
+main.underscore({
+  list : [1,2,3]
+}, function(err, res){
+  l(res);
+});
+
