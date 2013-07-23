@@ -133,23 +133,26 @@ exports.mongoose = function(params, cb){
 };
 
 /*
-
+  Connects to a CouchDB Database
+  @param params.db : the database name to connect to (e.g. '_users')
+  @param params.doc : the document to retrieve
  */
  exports.couchdb = function(params, cb){
    var util = require('util'),
    couchdb = require('felix-couchdb'),
-   client = couchdb.createClient(443, 'registry.npmjs.org', {
-     auth: { username: params.username, password: params.password }
-   }),
-   db = client.db('my-db');
+   port = process.env.COUCHDB_PORT || 80,
+   config, client;
 
-   db.getDoc('my-doc', function(er, doc) {
-    console.log('cb');
-     // TODO Just hangs, never connects
-     if (er) console.log(er);
-     util.puts('Fetched my new doc from couch:');
-     util.p(doc);
-   });
+   if (typeof process.env.COUCHDB_USERNAME !== "undefined" &&
+   typeof process.env.COUCHDB_PASSWORD !== "undefined"){
+     config = {
+       auth: { username: process.env.COUCHDB_USERNAME, password: process.env.COUCHDB_PASSWORD }
+     };
+   }
+
+   client = couchdb.createClient(port, process.env.COUCHDB_HOST, config),
+   db = client.db(params.db);
+   return db.getDoc(params.doc, cb);
  };
 
 /*
