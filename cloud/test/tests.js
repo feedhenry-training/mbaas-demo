@@ -134,3 +134,10 @@ main.underscore({
   l(res);
 });
 
+main.oracle({
+  query : ''
+}, function(err, res){
+  assert.ok(!err);
+  assert.ok(res);
+});
+

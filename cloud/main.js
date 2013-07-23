@@ -9,6 +9,7 @@ exports.db = function(params, callback){
 };
 
 /*
+ Executes a MySQL Query
  @param param.query : the query to execute
  */
 exports.mysql = function(params, cb){
@@ -30,6 +31,21 @@ exports.mysql = function(params, cb){
   });
 
   connection.end();
+};
+
+/*
+  Connects to an Oracle 11g instance
+ */
+exports.oracle = function(params, cb){
+  var oracle = require("oracle");
+  oracle.connect({ "hostname": process.env.ORACLE_HOSTNAME, "user": process.env.ORACLE_USERNAME, "password": process.env.ORACLE_PASSWORD }, function(err, connection) {
+    // selecting rows
+    if (err) {
+      return cb(err);
+    }
+    connection.execute("SELECT * FROM person WHERE name = :1", ['bob smith'], cb);
+    connection.close(); // call this when you are done with the connection
+  });
 };
 
 /*
@@ -58,6 +74,7 @@ exports.postgresql = function(params, cb){
 };
 
 /*
+  Inserts an object (document) into a collection in MongoDB
   @param params.insert an object to insert into your database
   @param params.collection the collection to insert it into
  */
