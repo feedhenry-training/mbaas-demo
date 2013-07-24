@@ -154,7 +154,6 @@ main.oracle({
 });
 
 main.sqlite({
-
 },
 function(err, res){
   assert.ok(!err);

@@ -177,6 +177,10 @@ exports.s3 = function(params, callback){
   });
 };
 
+/*
+ Creates a table in an in-memory sqlite DB
+ and returns the data it creats
+ */
 exports.sqlite = function(params, cb){
   var sqlite3 = require('sqlite3').verbose();
   var db = new sqlite3.Database(':memory:');
@@ -194,10 +198,7 @@ exports.sqlite = function(params, cb){
     });
 
   });
-
-
   db.close();
-
 };
 
 /*
