@@ -49,28 +49,23 @@ exports.oracle = function(params, cb){
 };
 
 /*
-
- */
+  Runs a query on a remote postgresql instance
+  @param params.query : the query to run
+*/
 exports.postgresql = function(params, cb){
-  var pg = require('pg');
-
-  var conString = "tcp://postgres:1234@localhost/postgres"; //TODO Find a free provider
+  var pg = require('pg').native; // needs native for SSL connection
+  var conString = process.env.POSTGRESQL_HOST;
 
   var client = new pg.Client(conString);
   client.connect(function(err) {
     if(err) {
       return console.error('could not connect to postgres', err);
     }
-    client.query('SELECT NOW() AS "theTime"', function(err, result) {
-      if(err) {
-        return console.error('error running query', err);
-      }
-      console.log(result.rows[0].theTime);
-      //output: Tue Jan 15 2013 19:12:47 GMT-600 (CST)
+    client.query(params.query, function(err, result) {
       client.end();
+      return cb(err, result);
     });
   });
-
 };
 
 /*
@@ -184,7 +179,7 @@ exports.s3 = function(params, callback){
 
 /*
  @param params.to : recipient
- @param params.subject : email subjecrt
+ @param params.subject : email subject
  @param params.body : message body
  */
 exports.sendgrid = function(params, cb){
@@ -218,7 +213,7 @@ exports.twillio = function(params, cb){
   client.sms.messages.create({
     body: params.body,
     to: params.to,
-    from: "+18572541934"
+    from: process.env.TWILIO_NUMBER
   }, function(err, message) {
     return cb(err, message);
   });

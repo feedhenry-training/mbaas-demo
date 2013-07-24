@@ -3,13 +3,22 @@ assert = require('assert'),
 util = require('util');
 function l(obj){
   console.log(util.inspect(obj, true, null, true));
-}
+  }
 
 main.mysql({
   query : 'USE sql314271;'
 }, function(err, res){
   assert.ok(!err);
   assert.ok(res);
+});
+
+main.postgresql({
+  query : 'SELECT NOW() AS "theTime"'
+}, function(err, res){
+  assert.ok(!err);
+  assert.ok(res);
+  assert.ok(res.rows && res.rows.length && res.rows.length > 0);
+  assert.ok(res.rows[0]);
 });
 
 main.mongodb({
