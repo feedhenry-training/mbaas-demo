@@ -153,3 +153,12 @@ main.oracle({
   assert.ok(res);
 });
 
+main.sqlite({
+
+},
+function(err, res){
+  assert.ok(!err);
+  assert.ok(res);
+  assert.ok(res.id);
+  assert.ok(res.info);
+});

@@ -177,6 +177,29 @@ exports.s3 = function(params, callback){
   });
 };
 
+exports.sqlite = function(params, cb){
+  var sqlite3 = require('sqlite3').verbose();
+  var db = new sqlite3.Database(':memory:');
+
+  db.serialize(function() {
+    db.run("CREATE TABLE feedhenry (info TEXT)");
+
+    var stmt = db.prepare("INSERT INTO feedhenry VALUES (?)");
+    stmt.run("Hello world");
+    stmt.finalize();
+
+    var rows = [];
+    db.get("SELECT rowid AS id, info FROM feedhenry", function(err, row) {
+      return cb(err, row);
+    });
+
+  });
+
+
+  db.close();
+
+};
+
 /*
  @param params.to : recipient
  @param params.subject : email subject
