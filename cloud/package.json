@@ -23,7 +23,9 @@
     "loggly" : "0.3.11",
     "mixpanel" : "0.0.16",
     "underscore" : "1.5.1",
-    "pkgcloud" : "0.8.4"
+    "pkgcloud" : "0.8.4",
+    "level" : "0.12.0",
+    "simplesmtp" : "0.3.4"
 
   },
   "scripts": {

@@ -3,6 +3,19 @@
     // Custom Select
     $("select[name='herolist']").selectpicker({style: 'btn-primary', menuStyle: 'dropdown-inverse'});
     app.events();
+    app.doAct({
+      act : 'params'
+    }, function(err, res){
+      if (err){
+        return alert(err.msg);
+      }
+      app.params = res;
+      for (var key in res){
+        if (res.hasOwnProperty(key)){
+          $('#connectorList').append('<option>' + key + '</option>');
+        }
+      }
+    });
   });
   
 })(jQuery);
@@ -12,12 +25,17 @@ var app = {
       $('#emailShow').on('click', this.showPopup);
       $('#smsShow').on('click', this.showPopup);
       $('#dbShow').on('click', this.showPopup);
+     $('#connectorsShow').on('click', this.showPopup);
       $('#dataShow').on('click', this.showPopup);
      $('#dbShow').on('click', this.showPopup);
       $('#modalScreen').on('click', this.hidePopup)
       $('.actionLink').on('click', this.doAction);
       $('#showDataLink').on('click', this.showData);
       $('#showDbLink').on('click', this.showDb);
+      $('#connectorList').on('change', this.setConnectorBody);
+      $('#connectorsSend').on('click', this.connectorsLink);
+      $('#connectorsCancel').on('click', this.hidePopup);
+
    },
    hidePopup : function(){
      $('#modalScreen').hide();
@@ -37,10 +55,10 @@ var app = {
         app[popupId].call(app, []);
       }
    },
-   doAction : function(){
+   doAction : function(e){
      var id = this.id;
      if (app.hasOwnProperty(id)){
-       app[id].call(app, []);
+       app[id].call(app, e);
      }
      app.hidePopup();
    },
@@ -54,6 +72,21 @@ var app = {
           alert(err.msg);
         }
      });
+   },
+   connectorsLink : function(e){
+    var req = JSON.parse($('#connectorJSON').val());
+    req.act = $('#connectorList').val();
+    app.doAct(req, function(err, res){
+      if (err){
+        alert('Error!\n' + JSON.stringify(err));
+      }
+      alert(JSON.stringify(res));
+    });
+   },
+   setConnectorBody : function(){
+    var name = $(this).val(),
+    params = app.params[name];
+     $('#connectorJSON').val(JSON.stringify(params));
    },
    smsLink : function(){
      app.doAct({

@@ -1,3 +1,11 @@
+var defaultParams = require('./test/params.js');
+/*
+  Utility function to give the client an insight into what other act calls are available
+ */
+exports.params = function(params, cb){
+  return cb(null, defaultParams);
+};
+
 /*
  Exposes $fb.db to the client side
  @param operation the $fh.db operation we want to do - e.g. list, create, update
@@ -455,3 +463,63 @@ exports.pkgcloud = function(params, cb){
   return amazon.getContainers(cb);
 }
 
+/*
+  Puts a value into LevelDB Store then retrieves it
+  @param params.key - the key to insert under
+  @param params.value - the value to insert
+ */
+exports.leveldb = function(params, cb){
+  var levelup = require('level')
+// 1) Create our database, supply location and options.
+//    This will create or open the underlying LevelDB store.
+  var db = levelup('./mydb')
+// 2) put a key & value
+  db.put(params.key, params.value, function (err) {
+    if (err) return console.log('Ooops!', err) // some kind of I/O error
+    // 3) fetch by key
+    return db.get(params.key, cb);
+  })
+};
+
+/*
+  Connects to a SMTP server
+  @param params.to : address to send to
+  @param params.from : from address
+  @param params.message : message string
+ */
+exports.smtp = function(params, cb){
+  var simplesmtp = require("simplesmtp"),
+  port = process.env.SMTP_PORT || 25,
+  options = {};
+
+  if (typeof process.env.SMTP_USERNAME === 'string' && typeof process.env.SMTP_PASSWORD === 'string'){
+    options = {
+      auth : {
+        user : process.env.SMTP_USERNAME,
+        pass : process.env.SMTP_PASSWORD
+      }
+    }
+  }
+
+  var client = simplesmtp.connect(port, process.env.SMTP_HOST, options);
+  client.once("idle", function(){
+    client.useEnvelope({
+      from: params.from,
+      to: [params.to]
+    });
+  });
+  client.on('message', function(){
+    client.write(params.message);
+    client.end();
+  });
+  client.on('error', function(err){
+    client.quit();
+    return cb(err);
+  });
+  client.on("ready", function(success, response){
+    if(success){
+      client.quit();
+      return cb(null, response);
+    }
+  });
+};

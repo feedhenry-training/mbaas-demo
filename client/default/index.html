@@ -68,6 +68,16 @@
           </div>
         </div>
 
+        <div class="row demo-tiles">
+          <div class="span3 home">
+            <div class="tile">
+              <img src="images/icons/Mail@2x.png" alt="Mail@2x" class="tile-image big-illustration">
+              <h3 class="tile-title">Other connectors</h3>
+              <p>Test other FH Connectors</p>
+              <a id="connectorsShow" class="btn btn-primary btn-large btn-block" href="#">Connectors</a>
+            </div>
+          </div>
+
       </div> <!-- /tiles -->
 
 
@@ -167,6 +177,28 @@
           <a style="display:none;" id="dbLink" class="btn btn-primary btn-large btn-block" href="#">Done!</a>
         </div>
       </div>
+
+        <!-- connectors -->
+        <div id="connectorsPopup" class="span6 popup" style="display : none;">
+          <div class="tile">
+            <img src="images/icons/Chat@2x.png" alt="Chat@2x" class="tile-image">
+            <h3 class="tile-title">Email</h3>
+            <p>Send an email using SendGrid</p>
+
+            <div class="btn-group">
+              <select id="connectorList">
+                <option>Select connector</option>
+              </select>
+              <br />
+              <textarea id="connectorJSON"  value="" placeholder="JSON Body" class="span3"></textarea>
+            </div>
+
+
+            <a id="connectorsSend" class="btn btn-primary btn-large btn-block" href="#">Send data</a>
+            <a id="connectorsCancel" class="btn btn-danger btn-large btn-block" href="#">Cancel</a>
+          </div>
+        </div>
+        <!-- /connectors -->
 
     </div> <!-- /container -->
 
