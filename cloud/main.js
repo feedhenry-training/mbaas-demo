@@ -246,7 +246,7 @@ exports.twillio = function(params, cb){
 
 
 /*
-
+  Connects to a RabbitMQ messaging queue, publishes a message & then listens for it
  */
 exports.rabbitmq = function(params, cb){
   var context = require('rabbit.js').createContext(process.env.RABBITMQ_HOST);
@@ -260,10 +260,12 @@ exports.rabbitmq = function(params, cb){
     sub.on('data', function(data) {
       console.log(data.toString());
       //TODO: Hangs indefinately, context doesn't close with context.close()
+      pub.destroy();
+      sub.destroy();
+      context.close();
       return cb(null, data.toString());
      });
   });
-
 };
 
 /*
@@ -439,4 +441,17 @@ exports.underscore = function(params, cb){
   });
   return cb(null, str);
 };
+
+/*
+  Uses pkgcloud to connect to an Amazon S3 bucket
+ */
+exports.pkgcloud = function(params, cb){
+  var pkgcloud = require('pkgcloud');
+  var amazon = pkgcloud.storage.createClient({
+    provider: 'amazon',
+    key: process.env.S3_SECRET,
+    keyId: process.env.S3_KEY
+  });
+  return amazon.getContainers(cb);
+}
 

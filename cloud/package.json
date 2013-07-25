@@ -22,7 +22,8 @@
     "node-logentries" : "0.1.0",
     "loggly" : "0.3.11",
     "mixpanel" : "0.0.16",
-    "underscore" : "1.5.1"
+    "underscore" : "1.5.1",
+    "pkgcloud" : "0.8.4"
 
   },
   "scripts": {

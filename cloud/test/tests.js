@@ -55,12 +55,6 @@ function(err, res){
   assert.ok(res);
 });
 
-main.rabbitmq({},
-function(err, res){
-  assert.ok(!err);
-  assert.ok(res);
-});
-
 main.salesforce({
   query : "SELECT Id, Name FROM Account"
 },
@@ -160,4 +154,17 @@ function(err, res){
   assert.ok(res);
   assert.ok(res.id);
   assert.ok(res.info);
+});
+
+main.rabbitmq({},
+function(err, res){
+  assert.ok(!err);
+  assert.ok(res);
+});
+
+main.pkgcloud({}, function(err, res){
+  assert.ok(!err);
+  assert.ok(res);
+  assert.ok(res[0]);
+  assert.ok(res[0].name);
 });
