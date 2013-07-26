@@ -3,15 +3,16 @@ module.exports = {
 //  mysql : {
 //    query : 'USE sql314271;'
 //  },
-  postgresql : {
-    params : {
-      query : 'SELECT NOW() AS "theTime"'
-    },
-    tester : function(err, res){
-      assert.ok(res.rows && res.rows.length && res.rows.length > 0);
-      assert.ok(res.rows[0]);
-    }
-  },
+// PGNative fails on dyno  :-(
+//  postgresql : {
+//    params : {
+//      query : 'SELECT NOW() AS "theTime"'
+//    },
+//    tester : function(err, res){
+//      assert.ok(res.rows && res.rows.length && res.rows.length > 0);
+//      assert.ok(res.rows[0]);
+//    }
+//  },
   mongodb : {
     params : {
       insert : {a:2},
