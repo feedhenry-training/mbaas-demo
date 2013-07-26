@@ -1,3 +1,4 @@
+var assert = require('assert');
 module.exports = {
 //  mysql : {
 //    query : 'USE sql314271;'
@@ -5,6 +6,10 @@ module.exports = {
   postgresql : {
     params : {
       query : 'SELECT NOW() AS "theTime"'
+    },
+    tester : function(err, res){
+      assert.ok(res.rows && res.rows.length && res.rows.length > 0);
+      assert.ok(res.rows[0]);
     }
   },
   mongodb : {
@@ -22,6 +27,9 @@ module.exports = {
     params : {
       db : '_users',
       doc : 'org.couchdb.user:fhtest'
+    },
+    tester : function(err, res){
+      assert.ok(res.name);
     }
   },
   s3 : {
@@ -37,18 +45,31 @@ module.exports = {
   googleapis : {
     params : {
       url : 'http://google.com'
+    },
+    tester : function(err, res){
+      assert.ok(res.longUrl);
     }
   },
   intercom : {
     params : {
       user : 'john.doe@example.com'
+    },
+    tester : function(err, res){
+      assert.ok(res.created_at);
     }
   },
-  netweaver : {
-  },
+//  netweaver : {
+//    params : {},
+//    tester : function(err, res){
+//      assert.ok(res.GetVersion());
+//    }
+//  },
   stripe : {
     params : {
       email : 'foobar@example.org'
+    },
+    tester : function(err, res){
+      assert.ok(typeof res.account_balance !== 'undefined');
     }
   },
   paypal : {
@@ -62,33 +83,62 @@ module.exports = {
         "first_name": "Joe",
         "last_name": "Shopper"
       }
+    },
+    tester : function(err, res){
+      assert.ok(res.state === 'ok')
     }
   },
   logentries : {
     params : {
       msg : {sleep:"all night", work:"all day"}
+    },
+    tester : function(err, res){
+      assert.ok(res.ok);
     }
   },
   loggly : {
     params : {
       msg : '127.0.0.1 - Theres no place like home'
+    },
+    tester : function(err, res){
+      assert.ok(res.response === "ok");
     }
   },
-  mixpanel : {},
+  mixpanel : {
+    params : {},
+    tester : function(err, res){
+      assert.ok(res.ok);
+    }
+  },
   underscore : {
     params : {
       list : [1,2,3]
     }
   },
-  sqlite : {},
+  sqlite : {
+    params : {},
+    tester : function(err, res){
+      assert.ok(res.id);
+      assert.ok(res.info);
+    }
+  },
   rabbitmq : {},
-  pkgcloud : {},
+  pkgcloud : {
+    params : {},
+    tester : function(err, res){
+      assert.ok(res[0]);
+      assert.ok(res[0].name);
+    }
+  },
   leveldb : {
     params : {
       value : 'LevelUP',
       key : 'name'
+    },
+    tester : function(err, res){
+      assert.ok(res === "LevelUP");
     }
-  }
+  },
   smtp : {
     params : {
       message : 'Hello world',

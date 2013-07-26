@@ -1,9 +1,13 @@
-var defaultParams = require('./test/params.js');
+var defaultParams = require('./test/definitions.js');
 /*
   Utility function to give the client an insight into what other act calls are available
  */
 exports.params = function(params, cb){
   return cb(null, defaultParams);
+};
+
+exports.runner = function(params, cb){
+  return require('test/tests.js').run(params, cb);
 };
 
 /*
@@ -170,7 +174,6 @@ exports.s3 = function(params, callback){
     bucket: params.bucket
   });
   client.list({}, function(err, data){
-    console.log('s3 list :: err=', err, ' data', data);
     if (err) {
       return callback(err);
     }
@@ -180,7 +183,6 @@ exports.s3 = function(params, callback){
     if (!contents){
       return callback({err : "No files found" });
     }
-    console.log('returning contents :: ', contents);
     return callback(null, {'contents':contents});
   });
 };
@@ -266,8 +268,6 @@ exports.rabbitmq = function(params, cb){
       });
     });
     sub.on('data', function(data) {
-      console.log(data.toString());
-      //TODO: Hangs indefinately, context doesn't close with context.close()
       pub.destroy();
       sub.destroy();
       context.close();
@@ -475,7 +475,9 @@ exports.leveldb = function(params, cb){
   var db = levelup('./mydb')
 // 2) put a key & value
   db.put(params.key, params.value, function (err) {
-    if (err) return console.log('Ooops!', err) // some kind of I/O error
+    if (err){
+      return cb(err);
+    }
     // 3) fetch by key
     return db.get(params.key, cb);
   })

@@ -25,10 +25,11 @@
     "underscore" : "1.5.1",
     "pkgcloud" : "0.8.4",
     "level" : "0.12.0",
-    "simplesmtp" : "0.3.4"
+    "simplesmtp" : "0.3.4",
+    "async" : "0.2.9"
 
   },
   "scripts": {
-    "test": "node test/tests.js"
+    "test": "node test/runner.js"
   }
 }
