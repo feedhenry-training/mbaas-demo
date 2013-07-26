@@ -13,6 +13,7 @@
 /resources/docs
 /docs/*
 node_modules
+cloud/mydb
 fhc*
 client/default/archive
 ios/www/*
