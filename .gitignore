@@ -15,6 +15,7 @@
 node_modules
 cloud/mydb
 cloud/test/envvar.json
+cloud/test/create.js
 fhc*
 client/default/archive
 ios/www/*
