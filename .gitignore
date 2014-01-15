@@ -12,7 +12,6 @@
 /docs
 /resources/docs
 /docs/*
-node_modules
 cloud/mydb
 cloud/test/envvar.json
 cloud/test/create.js
