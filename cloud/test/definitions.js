@@ -97,14 +97,14 @@ module.exports = {
       assert.ok(res.ok);
     }
   },
-  loggly : {
+  /*loggly : {
     params : {
       msg : '127.0.0.1 - Theres no place like home'
     },
     tester : function(err, res){
       assert.ok(res.response === "ok");
     }
-  },
+  }, Loggly - why you so SLOW!?*/
   mixpanel : {
     params : {},
     tester : function(err, res){
