@@ -24,15 +24,15 @@ module.exports = {
       message : 'Hello world'
     }
   },
-  couchdb : {
-    params : {
-      db : '_users',
-      doc : 'org.couchdb.user:fhtest'
-    },
-    tester : function(err, res){
-      assert.ok(res.name);
-    }
-  },
+//  couchdb : {
+//    params : {
+//      db : '_users',
+//      doc : 'org.couchdb.user:fhtest'
+//    },
+//    tester : function(err, res){
+//      assert.ok(res.name);
+//    }
+//  },
   s3 : {
     params : {
       bucket : 'cianstestbucket'
